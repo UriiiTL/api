@@ -1,0 +1,24 @@
+$def with (usuario, avatar_url)
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio</title>
+</head>
+<body>
+
+<h1>Generador de Avatar</h1>
+
+<form action="/avatar" method="post">
+    <label>Nombre de usuario:</label><br>
+    <input type="text" name="usuario" required>
+    <button type="submit">Generar Avatar</button>
+</form>
+
+$if avatar_url:
+    <hr>
+    <h2>Bienvenido, $usuario</h2>
+    <img src="$avatar_url" width="200">
+
+</body>
+</html>
