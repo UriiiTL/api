@@ -1,4 +1,6 @@
 import web
+import json
+import urllib.request
 
 urls = (
     '/', 'Index',
@@ -10,7 +12,6 @@ render = web.template.render('templates/')
 
 class Index:
     def GET(self):
-        # Página inicial sin avatar
         return render.index("", "")
 
 class Avatar:
@@ -18,7 +19,14 @@ class Avatar:
         data = web.input(usuario="")
         usuario = data.usuario
 
-        avatar_url = f"https://api.dicebear.com/9.x/avataaars-neutral/svg?seed={usuario}"
+        api_url = f"https://digimon-api.vercel.app/api/digimon/name/{usuario.lower()}"
+
+        try:
+            with urllib.request.urlopen(api_url) as response:
+                result = json.loads(response.read())
+                avatar_url = result[0]['img']
+        except:
+            avatar_url = ""
 
         return render.index(usuario, avatar_url)
 
