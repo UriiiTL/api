@@ -4,7 +4,6 @@ import urllib.request
 
 urls = (
     '/', 'Index',
-    '/avatar', 'Avatar'
 )
 
 app = web.application(urls, globals())
@@ -12,23 +11,15 @@ render = web.template.render('templates/')
 
 class Index:
     def GET(self):
-        return render.index("", "")
-
-class Avatar:
-    def POST(self):
-        data = web.input(usuario="")
-        usuario = data.usuario
-
-        api_url = f"https://digimon-api.vercel.app/api/digimon/name/{usuario.lower()}"
+        api_url = "https://digimon-api.vercel.app/api/digimon"
 
         try:
             with urllib.request.urlopen(api_url) as response:
-                result = json.loads(response.read())
-                avatar_url = result[0]['img']
+                digimons = json.loads(response.read())
         except:
-            avatar_url = ""
+            digimons = []
 
-        return render.index(usuario, avatar_url)
+        return render.index(digimons)
 
 if __name__ == "__main__":
     app.run()

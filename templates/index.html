@@ -1,24 +1,78 @@
-$def with (usuario, avatar_url)
+$def with (digimons)
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Inicio</title>
+    <title>Digimons</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .card img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        .level {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Generador de Digimons</h1>
+<h1>Listado de Digimons</h1>
 
-<form action="/avatar" method="post">
-    <label>Nombre del Digimon:</label><br>
-    <input type="text" name="usuario" required>
-    <button type="submit">Generar Avatar</button>
-</form>
+<input id="search" type="search" placeholder="Buscar digimon...">
 
-$if avatar_url:
-    <hr>
-    <h2>Digimon: $usuario</h2>
-    <img src="$avatar_url" width="200">
+<div class="cards" id="cards">
+$for d in digimons:
+    <div class="card" data-name="$d['name']" data-level="$d['level']">
+        <img src="$d['img']">
+        <h3>$d['name']</h3>
+        <div class="level">$d['level']</div>
+    </div>
+</div>
+
+<script>
+const input = document.getElementById("search");
+const cards = document.querySelectorAll(".card");
+
+input.addEventListener("input", () => {
+    const q = input.value.toLowerCase();
+    cards.forEach(c => {
+        const name = c.dataset.name.toLowerCase();
+        const level = c.dataset.level.toLowerCase();
+        c.style.display = (name.includes(q) || level.includes(q)) ? "" : "none";
+    });
+});
+</script>
 
 </body>
 </html>
